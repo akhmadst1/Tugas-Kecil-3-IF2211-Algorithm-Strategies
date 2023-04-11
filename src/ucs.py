@@ -1,4 +1,4 @@
-from utility import *
+from classes import PriorityQueue
 
 # Uniform-Cost-Search (UCS) algorithm
 class UCS:

@@ -1,4 +1,5 @@
-from utility import *
+from utility import haversine
+from classes import PriorityQueue
 
 # A* search algorithm
 class Astar:
