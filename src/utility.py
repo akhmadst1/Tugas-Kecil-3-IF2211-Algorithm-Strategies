@@ -1,19 +1,6 @@
-from math import *
-from classes import *
-
-# find the distance on actual earth (distance on sphere)
-# earth radius is approximately 6371 km
-def haversine(node1, node2, radius = 6371):
-    lat1 = radians(node1.getLatitude())
-    lat2 = radians(node2.getLatitude())
-    dLat = radians(lat2 - lat1)
-    dLon = radians(node2.getLongitude() - node1.getLongitude())
-
-    a = sin(dLat/2)**2 + cos(lat1)*cos(lat2)*sin(dLon/2)**2
-    c = 2*asin(sqrt(a))
-    
-    distance = radius * c
-    return distance
+from classes import Graph, Node
+from astar import Astar
+from ucs import UCS
 
 # graph initializer from file.txt
 def initializeGraph(filename):
@@ -81,3 +68,62 @@ def solvePath(path):
     longitudes = []
     longitudes.append(long)
     return names, latitudes, longitudes
+
+# def main(graph):
+#     print("Input location")
+#     start = None
+#     goal = None
+
+#     while start == None or goal == None:
+#         while start == None:
+#             startNode = input("Input Start: ")
+#             start = graph.findNode(startNode)
+#             # if (start == None):
+#             #     print("Invalid Location! Try Again")
+#             #     print()
+        
+#         while goal == None:
+#             goalNode = input("Input Goal: ")
+#             goal = graph.findNode(goalNode)
+#             # if (goal == None):
+#             #     print("Invalid Location! Try Again")
+#             #     print()
+#     astar = Astar(graph, start, goal)
+#     came_from, total_cost = astar.solve()
+
+#     if (len(came_from) == 0):
+#         path = []
+#         distance = 0
+#     else:
+#         path = astar.get_path()
+#         distance = total_cost[goal]
+
+#     return start, goal, path, distance 
+
+def main(graph):
+    # Input Lokasi
+    print("Masukkan rute lokasi yang ingin dicari:")
+    start = None
+    goal = None
+
+    while start == None or goal == None:
+        start_node = input("Masukkan lokasi awal: ")
+        start = graph.findNode(start_node)
+        goal_node = input("Masukkan lokasi tujuan: ")
+        goal = graph.findNode(goal_node)
+        if (start == None or start == None):
+            print("Masukkan tujuan lagi! Node tidak ditemukan")
+        print()
+
+    # Penghitungan path yang benar
+    astar = Astar(graph, start, goal)
+    came_from, total_cost = astar.solve()
+
+    if (len(came_from) == 0):
+        path = []
+        distance = 0
+    else:
+        path = astar.get_path()
+        distance = total_cost[goal]
+
+    return start, goal, path, distance 

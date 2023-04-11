@@ -1,5 +1,3 @@
-from utility import *
-
 class PriorityQueue:
     def __init__(self):
         self.queue = []
@@ -63,11 +61,16 @@ class Node:
         print("Latitude:", self.latitude)
         print("Longitude:", self.longitude)
         print("Neighbors: ", end="")
-        for i, neighbor in enumerate(self.neighbors):
+        # for i, neighbor in enumerate(self.neighbors):
+        #     if i == len(self.neighbors) - 1:
+        #         print(neighbor.name)
+        #     else:
+        #         print(neighbor.name, end=", ")
+        for i in range(len(self.neighbors)):
             if i == len(self.neighbors) - 1:
-                print(neighbor.name)
+                print(self.neighbors[i].name)
             else:
-                print(neighbor.name, end=", ")
+                print(self.neighbors[i].name, end=", ")
 
     def addNeighbor(self, node):
         self.neighbors.append(node)

@@ -1,5 +1,19 @@
-from utility import haversine
+from math import *
 from classes import PriorityQueue
+
+# find the distance on actual earth (distance on sphere)
+# earth radius is approximately 6371 km
+def haversine(node1, node2, radius = 6371):
+    lat1 = radians(node1.getLatitude())
+    lat2 = radians(node2.getLatitude())
+    dLat = radians(lat2 - lat1)
+    dLon = radians(node2.getLongitude() - node1.getLongitude())
+
+    a = sin(dLat/2)**2 + cos(lat1)*cos(lat2)*sin(dLon/2)**2
+    c = 2*asin(sqrt(a))
+    
+    distance = radius * c
+    return distance
 
 # A* search algorithm
 class Astar:
