@@ -1,3 +1,5 @@
+from utility import *
+
 # Uniform-Cost-Search (UCS) algorithm
 class UCS:
     def __init__(self, graph, start, goal):
@@ -12,12 +14,12 @@ class UCS:
         # cost without heuristic
         self.start.cost = 0
         self.toVisit.enqueue(self.start)
-        while not self.toVisit.isEmpty():
+        while not self.toVisit.isEmpty(): # search until empty or reach the goal node
             current = self.toVisit.dequeue()
             if current == self.goal:
                 break
             for neighbor in current.neighbors:
-                newCost = self.totalCost[current] + self.graph[current][neighbor]
+                newCost = self.totalCost[current]
                 # update the node with lowest cost
                 if neighbor not in self.totalCost or newCost < self.totalCost[neighbor]:
                     self.totalCost[neighbor] = newCost
@@ -42,3 +44,4 @@ class UCS:
         # get the path from start to goal
         path.reverse()
         return path
+    
