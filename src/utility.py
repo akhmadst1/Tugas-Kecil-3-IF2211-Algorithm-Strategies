@@ -1,6 +1,6 @@
 from math import *
+from classes import *
 
-'''------------ Function ------------'''
 # find the distance on actual earth (distance on sphere)
 # earth radius is approximately 6371 km
 def haversine(node1, node2, radius = 6371):
@@ -15,78 +15,69 @@ def haversine(node1, node2, radius = 6371):
     distance = radius * c
     return distance
 
-'''------------- Classes ---------------'''
-# PriorityQueue
-class PriorityQueue:
-    def __init__(self):
-        self.queue = []
+# graph initializer from file.txt
+def initializeGraph(filename):
+    text = filename.read().splitlines()
+    nodeCount = int(text[0])
+    nodes = text[1:nodeCount+1]
+    fileMatrix = text[nodeCount+1:]
+    adjacencyMatrix = [[0 for i in range(nodeCount)] for j in range(nodeCount)]
 
-    def isEmpty(self):
-        return len(self.queue) == 0
+    graph = Graph(nodeCount)
+    # add node from file.txt
+    for i in range(nodeCount):
+        splitString = nodes[i].split(" ", 2)
+        newNode = Node(float(splitString[0]), float(splitString[1]), splitString[2])
+        graph.addNode(newNode)
+        adjacencyMatrix[i] = [int(x) for x in fileMatrix[i].split(" ")]
+    graph.addEdges(adjacencyMatrix)
+    return graph
 
-    def enqueue(self, item):
-        self.queue.append(item)
+# lat and long getter
+def solveGraph(graph):
+    latitude = []
+    longitude = []
+    for i in range(len(graph.graphNodes)):
+        latitude.append(graph.graphNodes[i].getLatitude())
+        longitude.append(graph.graphNodes[i].getLongitude())
+    return latitude, longitude
 
-    # dequeue with the lowest cost priority
-    def dequeue(self):
-        minIdx = 0
-        for i in range(len(self.queue)):
-            if self.queue[i].cost < self.queue[minIdx].cost:
-                minIdx = i
-        val = self.queue.pop(minIdx)
-        return val
+# neighbor solver
+def solveNeighbor(graph):
+    arrDict = []
+    nodes = graph.graphNodes
+    for i in range(len(nodes)):
+        arrDict.append({
+            'latitude': nodes[i].getLatitude(),
+            'longitude': nodes[i].getLongitude(),
+            'neighbor': []
+        })
+        for j in range(len(nodes[i].neighbor)):
+            arrDict[i]['neighbor'].append({
+                'latitude': nodes[i].neighbor[j].getLatitude(),
+                'longitude': nodes[i].neighbor[j].getLongitude()
+            })
+    return arrDict
 
-# Graph      
-class Graph:
-    def __init__(self, nodeCount):
-        self.nodeCount = nodeCount
-        self.graphNodes = []
-
-    def addNode(self, node):
-        self.graphNodes.append(node)
-
-    def printGraph(self):
-        print("List of nodes:")
-        for node in self.graphNodes:
-            node.printNode()
-            print()
-
-    def addEdges(self, adjacencyMatrix):
-        for i in range(self.nodeCount):
-            for j in range(self.nodeCount):
-                if adjacencyMatrix[i][j] != 0:
-                    self.graphNodes[i].addNeighbor(self.graphNodes[j])
-
-    def findNode(self, nodeName):
-        for node in self.graphNodes:
-            if node.name == nodeName:
-                return node
-            
-# Node
-class Node:
-    def __init__(self, name, lat, long):
-        self.name = name
-        self.latitude = lat
-        self.longitude = long
-        self.cost = 0
-        self.neighbors = []
-
-    def getLatitude(self):
-        return self.latitude
-
-    def getLongitude(self):
-        return self.longitude
-
-    def printNode(self):
-        print("Name:", self.name)
-        print("Latitude:", self.latitude)
-        print("Longitude:", self.longitude)
-        print("Neighbors: ", end="")
-        for i, neighbor in enumerate(self.neighbors):
-            if i == len(self.neighbors) - 1:
-                print(neighbor.name)
-            else:
-                print(neighbor.name, end=", ")
-
-    def addNeighbor(self, node):
-        self.neighbors.append(node)
+# path solver
+def solvePath(path):
+    name = []
+    latitude = []
+    longitude = []
+    for i in range(len(path)):
+        name.append(path[i].name)
+        latitude.append(path[i].getLatitude())
+        longitude.append(path[i].getLongitude())
+    # get names
+    node = dict(enumerate(name))
+    names = []
+    names.append(node)
+    # get latitudes
+    lat = dict(enumerate(latitude))
+    latitudes = []
+    latitudes.append(lat)
+    # get longitudes
+    long = dict(enumerate(longitude))
+    longitudes = []
+    longitudes.append(long)
+    return names, latitudes, longitudes

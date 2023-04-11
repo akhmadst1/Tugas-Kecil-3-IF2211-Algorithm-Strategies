@@ -44,3 +44,4 @@ class Astar:
         # get the path from start to goal
         path.reverse()
         return path
+    
