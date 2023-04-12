@@ -4,14 +4,12 @@ from classes import PriorityQueue
 # find the distance on actual earth (distance on sphere)
 # earth radius is approximately 6371 km
 def haversine(node1, node2, radius = 6371):
-    lat1 = radians(node1.getLatitude())
-    lat2 = radians(node2.getLatitude())
+    lat1 = radians(node1.latitude)
+    lat2 = radians(node2.latitude)
     dLat = radians(lat2 - lat1)
-    dLon = radians(node2.getLongitude() - node1.getLongitude())
-
+    dLon = radians(node2.longitude - node1.longitude)
     a = sin(dLat/2)**2 + cos(lat1)*cos(lat2)*sin(dLon/2)**2
     c = 2*asin(sqrt(a))
-    
     distance = radius * c
     return distance
 
@@ -36,7 +34,7 @@ class Astar:
             for neighbor in current.neighbors:
                 newCost = self.totalCost[current] + haversine(current, neighbor)
                 # update the node with lowest cost
-                if neighbor not in self.totalCost or newCost < self.totalCost[neighbor]:
+                if (neighbor not in self.totalCost) or (newCost < self.totalCost[neighbor]):
                     self.totalCost[neighbor] = newCost
                     neighbor.cost = newCost + haversine(neighbor, self.goal)
                     self.toVisit.enqueue(neighbor)

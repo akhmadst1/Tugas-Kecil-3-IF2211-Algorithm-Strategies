@@ -17,7 +17,7 @@ class PriorityQueue:
         val = self.queue.pop(minIdx)
         return val
 
-class Graph:
+class Graph(object):
     def __init__(self, nodeCount):
         self.nodeCount = nodeCount
         self.graphNodes = []
@@ -42,11 +42,11 @@ class Graph:
             if node.name == nodeName:
                 return node
 
-class Node:
-    def __init__(self, name, lat, long):
-        self.name = name
+class Node(object):
+    def __init__(self, lat, long, name):
         self.latitude = lat
         self.longitude = long
+        self.name = name
         self.cost = 0
         self.neighbors = []
 
@@ -61,16 +61,11 @@ class Node:
         print("Latitude:", self.latitude)
         print("Longitude:", self.longitude)
         print("Neighbors: ", end="")
-        # for i, neighbor in enumerate(self.neighbors):
-        #     if i == len(self.neighbors) - 1:
-        #         print(neighbor.name)
-        #     else:
-        #         print(neighbor.name, end=", ")
-        for i in range(len(self.neighbors)):
+        for i, neighbor in enumerate(self.neighbors):
             if i == len(self.neighbors) - 1:
-                print(self.neighbors[i].name)
+                print(neighbor.name)
             else:
-                print(self.neighbors[i].name, end=", ")
+                print(neighbor.name, end=", ")
 
     def addNeighbor(self, node):
         self.neighbors.append(node)

@@ -25,8 +25,8 @@ def solveGraph(graph):
     latitude = []
     longitude = []
     for i in range(len(graph.graphNodes)):
-        latitude.append(graph.graphNodes[i].getLatitude())
-        longitude.append(graph.graphNodes[i].getLongitude())
+        latitude.append(graph.graphNodes[i].latitude)
+        longitude.append(graph.graphNodes[i].longitude)
     return latitude, longitude
 
 # neighbor solver
@@ -35,14 +35,14 @@ def solveNeighbor(graph):
     nodes = graph.graphNodes
     for i in range(len(nodes)):
         arrDict.append({
-            'latitude': nodes[i].getLatitude(),
-            'longitude': nodes[i].getLongitude(),
+            'latitude': nodes[i].latitude,
+            'longitude': nodes[i].longitude,
             'neighbor': []
         })
-        for j in range(len(nodes[i].neighbor)):
+        for j in range(len(nodes[i].neighbors)):
             arrDict[i]['neighbor'].append({
-                'latitude': nodes[i].neighbor[j].getLatitude(),
-                'longitude': nodes[i].neighbor[j].getLongitude()
+                'latitude': nodes[i].neighbors[j].latitude,
+                'longitude': nodes[i].neighbors[j].longitude
             })
     return arrDict
 
@@ -53,8 +53,8 @@ def solvePath(path):
     longitude = []
     for i in range(len(path)):
         name.append(path[i].name)
-        latitude.append(path[i].getLatitude())
-        longitude.append(path[i].getLongitude())
+        latitude.append(path[i].latitude)
+        longitude.append(path[i].longitude)
     # get names
     node = dict(enumerate(name))
     names = []
@@ -69,61 +69,46 @@ def solvePath(path):
     longitudes.append(long)
     return names, latitudes, longitudes
 
-# def main(graph):
-#     print("Input location")
-#     start = None
-#     goal = None
-
-#     while start == None or goal == None:
-#         while start == None:
-#             startNode = input("Input Start: ")
-#             start = graph.findNode(startNode)
-#             # if (start == None):
-#             #     print("Invalid Location! Try Again")
-#             #     print()
-        
-#         while goal == None:
-#             goalNode = input("Input Goal: ")
-#             goal = graph.findNode(goalNode)
-#             # if (goal == None):
-#             #     print("Invalid Location! Try Again")
-#             #     print()
-#     astar = Astar(graph, start, goal)
-#     came_from, total_cost = astar.solve()
-
-#     if (len(came_from) == 0):
-#         path = []
-#         distance = 0
-#     else:
-#         path = astar.get_path()
-#         distance = total_cost[goal]
-
-#     return start, goal, path, distance 
-
-def main(graph):
-    # Input Lokasi
-    print("Masukkan rute lokasi yang ingin dicari:")
+def main(graph, method):
+    print("Input location")
     start = None
     goal = None
-
     while start == None or goal == None:
-        start_node = input("Masukkan lokasi awal: ")
-        start = graph.findNode(start_node)
-        goal_node = input("Masukkan lokasi tujuan: ")
-        goal = graph.findNode(goal_node)
-        if (start == None or start == None):
-            print("Masukkan tujuan lagi! Node tidak ditemukan")
-        print()
+        # get start node
+        while start == None:
+            startNode = input("Input Start: ")
+            start = graph.findNode(startNode)
+            if (start == None):
+                print("Invalid Location! Try Again")
+                print()
+        # get goal node
+        while goal == None:
+            goalNode = input("Input Goal: ")
+            goal = graph.findNode(goalNode)
+            if (goal == None):
+                print("Invalid Location! Try Again")
+                print()
 
-    # Penghitungan path yang benar
-    astar = Astar(graph, start, goal)
-    came_from, total_cost = astar.solve()
+    # using ucs alogrithm
+    if method == "ucs":
+        ucs = UCS(graph, start, goal)
+        explored, totalCost = ucs.solve()
+        if (len(explored) == 0):
+            path = []
+            distance = 0
+        else:
+            path = ucs.getPath()
+            distance = totalCost[goal]
 
-    if (len(came_from) == 0):
-        path = []
-        distance = 0
+    # using astar algorithm
     else:
-        path = astar.get_path()
-        distance = total_cost[goal]
-
+        astar = Astar(graph, start, goal)
+        explored, totalCost = astar.solve()
+        if (len(explored) == 0):
+            path = []
+            distance = 0
+        else:
+            path = astar.getPath()
+            distance = totalCost[goal]
+            
     return start, goal, path, distance 
