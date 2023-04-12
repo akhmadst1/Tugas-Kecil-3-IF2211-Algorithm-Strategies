@@ -4,9 +4,9 @@
 -6.921052 107.606473 Toko Komputer New Pelangi
 -6.921229 107.607691 Masjid Agung
 -6.922082 107.604025 Garuda Kencana Toko
--6.922383 107.606428 Dalem Kaum
+-6.922383 107.606428 Dalem Kaum I
 -6.922522 107.607099 Pendopo Bandung
--6.922552 107.607521 Dalem Kaum6 3
+-6.922552 107.607521 Dalem Kaum II
 -6.923108 107.603929 Otista Kepatihan
 -6.923422 107.606289 Balonggede
 0 1 0 0 1 0 0 0 0 0
