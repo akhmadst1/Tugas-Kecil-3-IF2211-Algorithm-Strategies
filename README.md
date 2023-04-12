@@ -16,23 +16,55 @@ Algoritma UCS (*Uniform cost search*) dan A* (atau *A star*) dapat digunakan unt
 
 ## Requirement Program
 * Python versi 3.8.5 atau lebih baru. Pastikan pula terdapat package PyPi (PIP) pada Python Anda.
-* NumPy versi 1.22.3 atau lebih baru.
+* Virtual Environment
+* Flask
 
-## Cara Menyiapkan Environment
+## Cara Menyiapkan Environment dan Menjalankan Program
 1. Pastikan Python versi 3.8.5 atau lebih baru sudah terpasang pada komputer (Anda dapat mengecek versi Python dengan menjalankan command py --version pada *command prompt*).
-2. Lakukan instalasi semua library yang digunakan pada program library yang digunakan adalah flask dan sys .
-3. Jika seluruh library berhasil diinstalasi, maka akan terdapat pemberitahuan pada *command prompt*.
+2. Lakukan instalasi semua library yang digunakan pada program library yang digunakan adalah Virtual Environment dan Flask.
+Menyiapkan virtual environment:
+```bash
+pip install virtualenv
+python -m venv env
+```
 
-## Cara Menjalankan Program
-1. Pastikan sudah menyiapkan environment program serta mesin eksekusi terhubung dengan internet.
-2. Jalankan program main.py dengan menjalankan perintah py gui.py pada command prompt pada folder `src`.
-3. Jika berhasil dijalankan, maka akan dimintai input file. Masukkan file yang ingin diinputkan.
+Dari directory utama repository ini, aktifkan virtual environment:
+Pada UNIX
+```bash
+source env/Scripts/activate
+```
+Pada Windows
+```bash
+env/Scripts/activate.bat
+```
+
+Install Flask dengan command sebagai berikut:
+```bash
+pip install flask
+```
+
+Untuk menyalakan program, masukkan command sebagai berikut:
+Pada UNIX
+```bash
+export FLASK_APP=src/main.py
+flask run
+```
+Pada Windows
+```bash
+set FLASK_APP=src/main.py
+flask run
+```
 
 ## Cara Menggunakan Program
-1. Upload file .txt sesuai dengan format yang terdapat pada folder `test`.
-2. Masukkan start dan end node yang ingin dikunjungi 
-4. Tentukan metode pencarian antara UCS dan Astar
-5. Kemudian, program akan menunjukkan Shortest Path yang menunjukkan simpul yang dikunjungi untuk mendapatkan lintasan terpendek dan Visited Nodes yang menunjukkan simpul mana saja yang telah dikunjungi.
+1. Upload file.txt sesuai dengan format seperti yang terdapat pada folder `test`
+2. Program akan meminta input file
+3. Tentukan metode pencarian antara UCS dan A*
+4. Apabila input file sudah benar, akan ditampilkan list of nodes
+5. Jika program tidak ingin divisualisasikan dengan Google Maps, langsung loncat ke step 8
+6. Jika ingin divisualisasikan, Flask akan berjalan pada http://127.0.0.1:5000/
+7. Jalankan alamat Flask tersebut pada browser
+8. Masukkan start dan end node yang ingin dikunjungi
+9. Kemudian, program akan menunjukkan Shortest Path yang menunjukkan rute dengan lintasan terpendek serta jaraknya, dan visualisasinya dengan Google Maps (jika dipilih divisualisasikan)
 
 ## Authors
 
