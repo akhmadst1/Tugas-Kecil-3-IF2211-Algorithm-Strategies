@@ -28,8 +28,8 @@ class Graph(object):
     def printGraph(self):
         print("List of nodes:")
         for node in self.graphNodes:
+            print(4*" ", end='')
             node.printNode()
-            print()
 
     def addEdges(self, adjacencyMatrix):
         for i in range(self.nodeCount):
@@ -57,15 +57,7 @@ class Node(object):
         return self.longitude
 
     def printNode(self):
-        print("Name:", self.name)
-        print("Latitude:", self.latitude)
-        print("Longitude:", self.longitude)
-        print("Neighbors: ", end="")
-        for i, neighbor in enumerate(self.neighbors):
-            if i == len(self.neighbors) - 1:
-                print(neighbor.name)
-            else:
-                print(neighbor.name, end=", ")
+        print(self.name)
 
     def addNeighbor(self, node):
         self.neighbors.append(node)

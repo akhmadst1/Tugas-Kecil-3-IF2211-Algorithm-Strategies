@@ -1,14 +1,31 @@
 from classes import Graph, Node
 from astar import Astar
 from ucs import UCS
+import sys
+import time
 
 # graph initializer from file.txt
 def initializeGraph(filename):
     text = filename.read().splitlines()
     nodeCount = int(text[0])
+    if (nodeCount < 8):
+        print("Please fix your file, the nodes must be greater or equal than 8")
+        sys.exit()
     nodes = text[1:nodeCount+1]
     fileMatrix = text[nodeCount+1:]
     adjacencyMatrix = [[0 for i in range(nodeCount)] for j in range(nodeCount)]
+
+    # input searching method
+    while True:
+        method = input("Input Method (ucs/astar): ")
+        if method.lower() == "ucs":
+            method = "ucs"
+            break
+        elif method.lower() == "astar":
+            method = "astar"
+            break
+        else:
+            print("Invalid Method!")
 
     graph = Graph(nodeCount)
     # add node from file.txt
@@ -18,7 +35,7 @@ def initializeGraph(filename):
         graph.addNode(newNode)
         adjacencyMatrix[i] = [int(x) for x in fileMatrix[i].split(" ")]
     graph.addEdges(adjacencyMatrix)
-    return graph
+    return graph, method
 
 # lat and long getter
 def solveGraph(graph):
@@ -91,6 +108,7 @@ def main(graph, method):
 
     # using ucs alogrithm
     if method == "ucs":
+        startTime = time.time()
         ucs = UCS(graph, start, goal)
         explored, totalCost = ucs.solve()
         if (len(explored) == 0):
@@ -99,9 +117,11 @@ def main(graph, method):
         else:
             path = ucs.getPath()
             distance = totalCost[goal]
+        endTime = time.time()
 
     # using astar algorithm
     else:
+        startTime = time.time()
         astar = Astar(graph, start, goal)
         explored, totalCost = astar.solve()
         if (len(explored) == 0):
@@ -110,5 +130,6 @@ def main(graph, method):
         else:
             path = astar.getPath()
             distance = totalCost[goal]
-            
-    return start, goal, path, distance 
+        endTime = time.time()
+    execTime = endTime - startTime
+    return start, goal, path, distance, execTime
