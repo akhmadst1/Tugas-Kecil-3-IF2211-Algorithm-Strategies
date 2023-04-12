@@ -30,6 +30,7 @@ class Graph(object):
         for node in self.graphNodes:
             print(4*" ", end='')
             node.printNode()
+        print()
 
     def addEdges(self, adjacencyMatrix):
         for i in range(self.nodeCount):
@@ -39,7 +40,7 @@ class Graph(object):
 
     def findNode(self, nodeName):
         for node in self.graphNodes:
-            if node.name == nodeName:
+            if node.name.lower() == nodeName:
                 return node
 
 class Node(object):

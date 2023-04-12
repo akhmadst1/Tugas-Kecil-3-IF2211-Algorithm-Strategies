@@ -2,7 +2,6 @@ from classes import Graph, Node
 from astar import Astar
 from ucs import UCS
 import sys
-import time
 
 # graph initializer from file.txt
 def initializeGraph(filename):
@@ -93,22 +92,21 @@ def main(graph, method):
     while start == None or goal == None:
         # get start node
         while start == None:
-            startNode = input("Input Start: ")
-            start = graph.findNode(startNode)
+            startNode = input("    Start Location: ")
+            start = graph.findNode(startNode.lower())
             if (start == None):
                 print("Invalid Location! Try Again")
                 print()
         # get goal node
         while goal == None:
-            goalNode = input("Input Goal: ")
-            goal = graph.findNode(goalNode)
+            goalNode = input("    Goal Location: ")
+            goal = graph.findNode(goalNode.lower())
             if (goal == None):
                 print("Invalid Location! Try Again")
                 print()
 
     # using ucs alogrithm
     if method == "ucs":
-        startTime = time.time()
         ucs = UCS(graph, start, goal)
         explored, totalCost = ucs.solve()
         if (len(explored) == 0):
@@ -117,11 +115,9 @@ def main(graph, method):
         else:
             path = ucs.getPath()
             distance = totalCost[goal]
-        endTime = time.time()
 
     # using astar algorithm
     else:
-        startTime = time.time()
         astar = Astar(graph, start, goal)
         explored, totalCost = astar.solve()
         if (len(explored) == 0):
@@ -130,6 +126,17 @@ def main(graph, method):
         else:
             path = astar.getPath()
             distance = totalCost[goal]
-        endTime = time.time()
-    execTime = endTime - startTime
-    return start, goal, path, distance, execTime
+    return start, goal, path, distance
+
+def printSolution(graph, method):
+    start, goal, path, distance = main(graph, method)
+    print("\n====[ SHORTEST PATH FROM " + start.name.upper() + " TO " + goal.name.upper() + " ]====")
+    print("METHOD: " + method.upper())
+    print("ROUTE: ", end="")
+    for node in path:
+        if node.name != goal.name:
+            print(node.name, end=" - ")
+        else:
+            print(node.name)
+    print("TOTAL DISTANCE: " + str(round(distance*1000, 3)) + " m")
+

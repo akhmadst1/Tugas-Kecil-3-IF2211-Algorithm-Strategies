@@ -39,11 +39,9 @@ class Astar:
                     neighbor.cost = newCost + haversine(neighbor, self.goal)
                     self.toVisit.enqueue(neighbor)
                     self.explored[neighbor] = current
-
         # if goal node is not found, return empty
         if (self.goal not in self.explored):
             self.explored = {}
-        
         # return node and total cost
         return self.explored, self.totalCost
     
@@ -53,7 +51,6 @@ class Astar:
         while current != self.start:
             current = self.explored[current]
             path.append(current)
-        
         # get the path from start to goal
         path.reverse()
         return path

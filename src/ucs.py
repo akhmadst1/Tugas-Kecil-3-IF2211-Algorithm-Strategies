@@ -1,4 +1,5 @@
 from classes import PriorityQueue
+from astar import haversine
 
 # Uniform-Cost-Search (UCS) algorithm
 class UCS:
@@ -11,7 +12,6 @@ class UCS:
         self.toVisit = PriorityQueue()
     
     def solve(self):
-        # cost without heuristic
         self.start.cost = 0
         self.toVisit.enqueue(self.start)
         while not self.toVisit.isEmpty(): # search until empty or reach the goal node
@@ -19,18 +19,16 @@ class UCS:
             if current == self.goal:
                 break
             for neighbor in current.neighbors:
-                newCost = self.totalCost[current]
+                newCost = self.totalCost[current] + haversine(current, neighbor)
                 # update the node with lowest cost
                 if neighbor not in self.totalCost or newCost < self.totalCost[neighbor]:
                     self.totalCost[neighbor] = newCost
                     neighbor.cost = newCost
                     self.toVisit.enqueue(neighbor)
                     self.explored[neighbor] = current
-        
         # if goal node is not found, return empty
         if (self.goal not in self.explored):
             self.explored = {}
-        
         # return node and total cost
         return self.explored, self.totalCost
     
@@ -40,7 +38,6 @@ class UCS:
         while current != self.start:
             current = self.explored[current]
             path.append(current)
-        
         # get the path from start to goal
         path.reverse()
         return path
