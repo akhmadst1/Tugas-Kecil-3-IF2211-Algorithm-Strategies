@@ -1,9 +1,9 @@
 8
--6.884589 107.609801 Jalan Siliwangi
--6.887741 107.609578 Jalan Tamansari
--6.887292 107.611562 Jalan Dayang Sumbi
+-6.884589 107.609801 Jl. Siliwangi
+-6.887741 107.609578 Jl. Tamansari
+-6.887292 107.611562 Jl. Dayang Sumbi
 -6.893853 107.608408 Kebun Binatang
--6.893257 107.610468 Jalan Ganesha
+-6.893257 107.610468 Jl. Ganesha
 -6.896877 107.609589 Pelesiran
 -6.898786 107.607388 Jl. Pasopati
 -6.894803 107.610286 Gelap Nyawang
