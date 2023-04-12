@@ -1,9 +1,10 @@
+import json
+import sys
 from utility import *
 from classes import *
 from astar import Astar
 from ucs import UCS
 from flask import Flask, render_template
-import json
 from flask.json import jsonify
 
 app = Flask(__name__)
@@ -14,22 +15,22 @@ while True:
         file = open("test/" + filename)
         break
     except FileNotFoundError:
-        print("File Not Found!")
+        print("File Not Found!\n")
 
-# input searching method
+graph, method = initializeGraph(file)
+graph.printGraph()
+
 while True:
-    method = input("Input Method (ucs/astar): ")
-    if method.lower() == "ucs":
-        method = "ucs"
-        break
-    elif method.lower() == "astar":
-        method = "astar"
+    visualize = input("Visualize the solution with google maps API? (y/n): ")
+    if visualize.lower() == "n" or visualize.lower() == "no":
+         printSolution(graph, method)
+         sys.exit()
+    elif visualize.lower() == "y" or visualize.lower() == "yes":
+        print("Run http://127.0.0.1:5000 in your local browser, then enter start and goal node")
+        print()
         break
     else:
-        print("Invalid Method!")
-
-graph = initializeGraph(file)
-graph.printGraph()
+        print("Invalid Input!\n")
 
 # Flask
 @app.route("/get-data")
@@ -41,7 +42,7 @@ def getData():
 def init():
     start, goal, path, distance = main(graph, method)
     dict, lat, long = solvePath(path)
-    marklat, marklong = solveGraph(graph)
+    markLatitude, markLongitude = solveGraph(graph)
     solution = json.dumps(dict)
     latitudes = json.dumps(lat)
     longitudes = json.dumps(long)
@@ -52,14 +53,15 @@ def init():
     paths = path
     return render_template(
         'visualization.html',
-        slat = startLatitude,
-        slong = startLongitude,
-        dlat = goalLatitude,
-        dlong = goalLongitude,
-        spath = solution,
-        latss = latitudes,
-        longss = longitudes,
-        sspath = paths,
-        dist = distance,
-        marklat = marklat,
-        marklong = marklong)
+        method = method.upper(),
+        startLat = startLatitude,
+        startLong = startLongitude,
+        goalLat = goalLatitude,
+        goalLong = goalLongitude,
+        solution = solution,
+        solutionPath = paths,
+        latitudes = latitudes,
+        longitudes = longitudes,
+        markLatitude = markLatitude,
+        markLongitude = markLongitude,
+        dist = round(distance*1000, 3))

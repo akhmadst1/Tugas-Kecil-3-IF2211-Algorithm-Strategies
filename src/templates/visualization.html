@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8">
+        <title>UCS and A* Searching Algorithm</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC8Ti9b-rHdaKt81gwPugA2Gl291hB_qp4&libraries=geometry&callback=initMap"
+        type="text/javascript"></script>
+        <script type="text/javascript">
+            window.initMap = function() {
+                var labelIndex = 0;
+                var directionsService = new google.maps.DirectionsService;
+                var directionsDisplay = new google.maps.DirectionsRenderer;
+                const nodeCode = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: {
+                        lat: {{startLat}}, 
+                        lng: {{startLong}}
+                    },
+                    zoom: 16
+                });
+                directionsDisplay.setMap(map);
+                // add label for solution
+                function addLabel(coordinate){
+                    var marker = new google.maps.Marker({
+                        position: coordinate,
+                        label: { text: nodeCode[labelIndex++ % nodeCode.length],
+                                color: 'black',
+                                fontWeight: 'bold'
+                                },
+                        map: map,
+                    });
+                }
+                // add marker for nodes
+                function addNode(coordinate){
+                    var marker = new google.maps.Marker({
+                        position: coordinate,
+                        map: map,
+                    });
+                }
+                var markLatitude = {{markLatitude}};
+                var markLongitude = {{markLongitude}};
+                for(var i = 0; i < markLatitude.length; i++){
+                    addNode({lat: markLatitude[i], lng: markLongitude[i]});
+                }
+                var points = JSON.parse('{{solution | safe}}');
+                var lats = JSON.parse('{{latitudes | safe}}');
+                var longs = JSON.parse('{{longitudes | safe}}');
+                for(var i = 0; i < Object.keys(lats[0]).length; i++){
+                    addLabel({lat: lats[0][i], lng: longs[0][i]});
+                }
+                var graphObj;
+                fetch('get-data')
+                .then(response => response.json())
+                .then(data => graphObj = data)
+                .then(() => {
+                    const nodeList = graphObj.arrDict;
+                    for (let i = 0; i < nodeList.length; i++) {
+                        for (let j = 0; j < nodeList[i].neighbor.length; j++) {
+                            let arrayPath = [];
+                            arrayPath.push({
+                                lat: parseFloat(nodeList[i].latitude),
+                                lng: parseFloat(nodeList[i].longitude)
+                            }, {
+                                lat: parseFloat(nodeList[i].neighbor[j].latitude),
+                                lng: parseFloat(nodeList[i].neighbor[j].longitude)
+                            })
+                            // draw edges
+                            var drawEdge = new google.maps.Polyline({
+                                path: arrayPath,
+                                geodesic: true,
+                                strokeColor: "#0000FF",
+                                strokeOpacity: 1.0,
+                                strokeWeight: 2,
+                            });
+                            // draw solution
+                            var drawLine = new google.maps.Polyline({
+                                path: coordinateArray,
+                                strokeColor: "#FF0000",
+                                strokeOpacity: 1.0,
+                                strokeWeight: 6,
+                            });
+                            drawEdge.setMap(map);
+                            drawLine.setMap(map);
+                        }
+                    }
+                })
+                // fill array as latitude and longitude from solution node
+                var coordinateArray = [];
+                for(var i = 0; i < Object.keys(lats[0]).length; i++){
+                    coordinateArray.push({
+                        lat: lats[0][i],
+                        lng: longs[0][i]
+                    });
+                }           
+            }
+        </script>
+    </head>
+    <body class="d-flex h-100 text-center text-black bg-light">
+        <div class="container">
+            <header class="pt-4 pb-2 mb-4 bg-light text-black">
+                <div>
+                    <h1>UCS AND A* FINDING ALGORITHM</h1>
+                </div>
+            </header>
+            <div class="mb-5 bg-light rounded-3">
+                <div id="map" style="width:100%; height:500px;"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2 class="pt-3">ROUTE PATH:</h2>
+                        {% for path in solutionPath %}
+                        <h3>{{path.name}}</h3>
+                        {% endfor %}
+                </div>
+                <div class="col-lg-6">
+                    <h2 class="pt-3">DISTANCE:</h2>
+                    <h3>{{dist}} m</h3>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
